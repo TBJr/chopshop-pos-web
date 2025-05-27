@@ -59,7 +59,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "commit": "cz"
   },
   "eslintConfig": {
     "extends": [
@@ -83,9 +84,14 @@
     "autoprefixer": "10.4.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@testing-library/dom": "^10.4.0",
     "@types/feather-icons": "^4.29.4",
-    "@types/flatpickr": "^3.1.4"
+    "@types/flatpickr": "^3.1.4",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7"
   },
   "overrides": {
     "typescript": "^5.3.3"
