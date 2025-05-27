@@ -10,6 +10,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/flatpickr.css";
 import Select from "react-select";
 
 const ProductsGlobalFilter = () => {

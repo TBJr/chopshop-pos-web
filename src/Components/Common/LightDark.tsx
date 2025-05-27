@@ -1,4 +1,4 @@
-import { LAYOUT_MODE_TYPES } from "../../Components/constants/layout";
+import { LAYOUT_MODE_TYPES } from "../constants/layout";
 
 interface LightDarkProps {
     layoutMode: string;
