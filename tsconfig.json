@@ -19,8 +19,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["vite/client"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/config.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/config.js", "src", "vite-env.d.ts"],
   "exclude": ["node_modules"]
 }
