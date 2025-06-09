@@ -136,3 +136,9 @@ dist
 .pnp.*
 /.idea
 src/.DS_Store
+src/assets/scss/.DS_Store
+src/assets/images/.DS_Store
+src/assets/.DS_Store
+src/assets/images/nft/.DS_Store
+.DS_Store
+.env
