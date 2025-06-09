@@ -1,37 +1,39 @@
 // src/Routes/AuthProtected.tsx
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { setAuthorization } from "../helpers/api_helper";
-import { useDispatch } from "react-redux";
+import { supabase } from "../lib/supabaseClient";
 
-import { useProfile } from "../Components/Hooks/UserHooks";
-
-import { logoutUser } from "../slices/auth/login/thunk";
-
-const AuthProtected = (props : any) =>{
-    const dispatch : any = useDispatch();
-    const { userProfile, loading, token } = useProfile();
+const AuthProtected: React.FC<{ children: JSX.Element }> = ({ children }) => {
+    const [user, setUser] = useState<any>(undefined);
 
     useEffect(() => {
-        if (userProfile && !loading && token) {
-            setAuthorization(token);
-        } else if (!userProfile && loading && !token) {
-            dispatch(logoutUser());
-        }
-    }, [token, userProfile, loading, dispatch]);
+        // On mount, check current session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+        });
 
-    /*
-      Navigate is un-auth access protected routes via url
-      */
+        // Listen for auth changes (e.g. login, logout, OAuth)
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
 
-    if (!userProfile && loading && !token) {
-        return (
-            <Navigate to={{ pathname: "/login"}} />
-        );
+        return () => {
+            listener.subscription.unsubscribe();
+        };
+    }, []);
+
+    // While checking session
+    if (user === undefined) {
+        return null; // or a loading spinner if you prefer
     }
 
-    return <>{props.children}</>;
-};
+    // Not authenticated → redirect
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
 
+    // Authenticated → render protected content
+    return <>{children}</>;
+};
 
 export default AuthProtected;
