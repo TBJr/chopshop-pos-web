@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 //Dashboard
-import DashboardEcommerce from "../pages/DashboardEcommerce";
+import Dashboard from "../pages/Dashboard";
 
 
 import Basic404 from '../pages/AuthenticationInner/Errors/Basic404';
@@ -20,8 +20,8 @@ import UserProfile from "../pages/Authentication/user-profile";
 
 
 const authProtectedRoutes = [
-    { path: "/dashboard", component: <DashboardEcommerce /> },
-    { path: "/index", component: <DashboardEcommerce /> },
+    { path: "/dashboard", component: <Dashboard /> },
+    { path: "/index", component: <Dashboard /> },
 
     //User Profile
     { path: "/profile", component: <UserProfile /> },

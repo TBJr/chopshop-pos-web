@@ -1,8 +1,9 @@
-import BreadCrumb from "Components/Common/BreadCrumb";
+// src/pages/Dashboard/index.tsx
 import React from "react";
-import { Container } from "reactstrap";
+import BreadCrumb from "../../Components/Common/BreadCrumb";
+import {Container} from "reactstrap";
 
-const DashboardEcommerce = () => {
+const Dashboard: React.FC = () => {
     document.title = "Dashboard | Evolvtech - React Admin & Dashboard Template";
 
     return (
@@ -16,4 +17,4 @@ const DashboardEcommerce = () => {
     );
 };
 
-export default DashboardEcommerce;
+export default Dashboard;

@@ -1,39 +1,26 @@
-import React from 'react';
+// src/App.tsx
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-//import Scss
-import './assets/scss/themes.scss';
+// Styles
+import "./assets/scss/themes.scss";
 
-//imoprt Route
-import Route from './Routes';
-
-// Import Firebase Configuration file
-// import { initFirebaseBackend } from "./helpers/firebase_helper";
-
-// Fake Backend
-// import fakeBackend from "./helpers/AuthType/fakeBackend";
-
-// Activating fake backend
-// fakeBackend();
-
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_APIKEY,
-  authDomain: process.env.REACT_APP_AUTHDOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASEURL,
-  projectId: process.env.REACT_APP_PROJECTID,
-  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_APPID,
-  measurementId: process.env.REACT_APP_MEASUREMENTID,
-};
-
-// // init firebase backend
-// initFirebaseBackend(firebaseConfig);
+// Pages
+import Login from "./pages/Authentication/Login";
+import Register from "./pages/Authentication/Register";
+import Dashboard from "./pages/Dashboard";
+// ...import any other pages
 
 function App() {
     return (
-        <React.Fragment>
-            <Route />
-        </React.Fragment>
+        <Router>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="*" element={<Login />} />
+            </Routes>
+        </Router>
     );
 }
 
