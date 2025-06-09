@@ -4,16 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import {
     Row,
     Col,
-    CardBody,
     Card,
+    CardBody,
     Container,
     Input,
     Label,
     Form,
     FormFeedback,
     Button,
-    Spinner,
-    Alert
+    Spinner
 } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -39,7 +38,9 @@ const Register: React.FC = () => {
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email").required("Please enter your email"),
             first_name: Yup.string().required("Please enter your username"),
-            password: Yup.string().min(6, "At least 6 characters").required("Please enter your password"),
+            password: Yup.string()
+                .min(6, "At least 6 characters")
+                .required("Please enter your password"),
             confirm_password: Yup.string()
                 .oneOf([Yup.ref("password")], "Passwords do not match")
                 .required("Please confirm your password")
