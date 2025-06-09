@@ -1,3 +1,4 @@
+// src/pages/AuthenticationInner/authCarousel.tsx
 import React from "react";
 import { Col } from "reactstrap";
 import { Carousel } from "react-responsive-carousel";

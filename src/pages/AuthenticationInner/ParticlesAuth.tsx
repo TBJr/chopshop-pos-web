@@ -1,3 +1,4 @@
+// src/pages/AuthenticationInner/ParticlesAuth.tsx
 import React from 'react';
 import withRouter from '../../Components/Common/withRouter';
 

@@ -1,3 +1,4 @@
+// src/pages/AuthenticationInner/Errors/Error500.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';

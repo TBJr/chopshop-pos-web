@@ -1,3 +1,4 @@
+// src/pages/AuthenticationInner/Errors/Alt404.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, Col, Container, Row } from 'reactstrap';
