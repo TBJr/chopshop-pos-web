@@ -1,247 +1,176 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, CardBody, Card, Alert, Container, Input, Label, Form, FormFeedback, Button, Spinner } from "reactstrap";
-
-// Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// action
-import { registerUser, resetRegisterFlag } from "../../slices/thunks";
-
-//redux
-import { useSelector, useDispatch } from "react-redux";
-
+// src/pages/Authentication/Register.tsx
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+    Row,
+    Col,
+    CardBody,
+    Card,
+    Container,
+    Input,
+    Label,
+    Form,
+    FormFeedback,
+    Button,
+    Spinner,
+    Alert
+} from "reactstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-//import images
 import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
-import { createSelector } from "reselect";
+import { supabase } from "../../lib/supabaseClient";
 
-const Register = () => {
-    const [loader, setLoader] = useState<boolean>(false);
-    const history = useNavigate();
-    const dispatch = useDispatch<any>();
+const Register: React.FC = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    const validation = useFormik({
-        // enableReinitialize : use this flag when initial values needs to be changed
+    const formik = useFormik({
         enableReinitialize: true,
-
         initialValues: {
-            email: '',
-            first_name: '',
-            password: '',
-            confirm_password: ''
+            email: "",
+            first_name: "",
+            password: "",
+            confirm_password: ""
         },
         validationSchema: Yup.object({
-            email: Yup.string().required("Please Enter Your Email"),
-            first_name: Yup.string().required("Please Enter Your Username"),
-            password: Yup.string().required("Please enter your password"),
+            email: Yup.string().email("Invalid email").required("Please enter your email"),
+            first_name: Yup.string().required("Please enter your username"),
+            password: Yup.string().min(6, "At least 6 characters").required("Please enter your password"),
             confirm_password: Yup.string()
                 .oneOf([Yup.ref("password")], "Passwords do not match")
-                .required("Please confirm your password"),
+                .required("Please confirm your password")
         }),
-        onSubmit: (values) => {
-            dispatch(registerUser(values));
-            setLoader(true)
+        onSubmit: async (values) => {
+            setLoading(true);
+            const { error } = await supabase.auth.signUp({
+                email: values.email,
+                password: values.password,
+                options: { data: { first_name: values.first_name } }
+            });
+            setLoading(false);
+
+            if (error) {
+                toast.error(error.message);
+            } else {
+                toast.success("Registration successful! Check your email to confirm.");
+                setTimeout(() => navigate("/login"), 2000);
+            }
         }
     });
 
-    const selectLayoutState = (state: any) => state.Account;
-    const registerdatatype = createSelector(
-        selectLayoutState,
-        (account) => ({
-            success: account.success,
-            error: account.error
-        })
-    );
-    // Inside your component
-    const {
-        error, success
-    } = useSelector(registerdatatype);
-
-
-    useEffect(() => {
-        if (success) {
-            setTimeout(() => history("/login"), 3000);
-        }
-
-        setTimeout(() => {
-            dispatch(resetRegisterFlag());
-        }, 3000);
-
-    }, [dispatch, success, error, history]);
-
-    document.title = "Basic SignUp | Evolvtech - React Admin & Dashboard Template";
-
     return (
-        <React.Fragment>
-            <ParticlesAuth>
-                <div className="auth-page-content">
-                    <Container>
-                        <Row>
-                            <Col lg={12}>
-                                <div className="text-center mt-sm-5 mb-4 text-white-50">
-                                    <div>
-                                        <Link to="/" className="d-inline-block auth-logo">
-                                            <img src={logoLight} alt="" height="20" />
+        <ParticlesAuth>
+            <div className="auth-page-content">
+                <Container>
+                    <Row className="justify-content-center">
+                        <Col lg={6} xl={5}>
+                            <Card className="mt-4">
+                                <CardBody className="p-4">
+                                    <div className="text-center mb-4">
+                                        <Link to="/" className="d-inline-block auth-logo mb-3">
+                                            <img src={logoLight} alt="logo" height="30" />
                                         </Link>
+                                        <h5 className="text-primary">Create New Account</h5>
+                                        <p className="text-muted">Get your free Evolvtech account now</p>
                                     </div>
-                                    <p className="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
-                                </div>
-                            </Col>
-                        </Row>
 
-                        <Row className="justify-content-center">
-                            <Col md={8} lg={6} xl={5}>
-                                <Card className="mt-4">
+                                    <Form onSubmit={formik.handleSubmit} noValidate>
+                                        <ToastContainer autoClose={2000} />
 
-                                    <CardBody className="p-4">
-                                        <div className="text-center mt-2">
-                                            <h5 className="text-primary">Create New Account</h5>
-                                            <p className="text-muted">Get your free evolvtech account now</p>
+                                        <div className="mb-3">
+                                            <Label htmlFor="email">Email <span className="text-danger">*</span></Label>
+                                            <Input
+                                                id="email"
+                                                name="email"
+                                                type="email"
+                                                placeholder="Enter email address"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.email}
+                                                invalid={!!(formik.touched.email && formik.errors.email)}
+                                            />
+                                            {formik.touched.email && formik.errors.email && (
+                                                <FormFeedback>{formik.errors.email}</FormFeedback>
+                                            )}
                                         </div>
-                                        <div className="p-2 mt-4">
-                                            <Form
-                                                onSubmit={(e) => {
-                                                    e.preventDefault();
-                                                    validation.handleSubmit();
-                                                    return false;
-                                                }}
-                                                className="needs-validation" action="#">
 
-                                                {success && success ? (
-                                                    <>
-                                                        {toast("Your Redirect To Login Page...", { position: "top-right", hideProgressBar: false, className: 'bg-success text-white', progress: undefined, toastId: "" })}
-                                                        <ToastContainer autoClose={2000} limit={1} />
-                                                        <Alert color="success">
-                                                            Register User Successfully and Your Redirect To Login Page...
-                                                        </Alert>
-                                                    </>
-                                                ) : null}
-
-                                                {error && error ? (
-                                                    <Alert color="danger"><div>
-                                                        Email has been Register Before, Please Use Another Email Address... </div></Alert>
-                                                ) : null}
-
-                                                <div className="mb-3">
-                                                    <Label htmlFor="useremail" className="form-label">Email <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        id="email"
-                                                        name="email"
-                                                        className="form-control"
-                                                        placeholder="Enter email address"
-                                                        type="email"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.email || ""}
-                                                        invalid={
-                                                            validation.touched.email && validation.errors.email ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.email && validation.errors.email ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.email}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-                                                <div className="mb-3">
-                                                    <Label htmlFor="username" className="form-label">Username <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="first_name"
-                                                        type="text"
-                                                        placeholder="Enter username"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.first_name || ""}
-                                                        invalid={
-                                                            validation.touched.first_name && validation.errors.first_name ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.first_name && validation.errors.first_name ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.first_name}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-3">
-                                                    <Label htmlFor="userpassword" className="form-label">Password <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="password"
-                                                        type="password"
-                                                        placeholder="Enter Password"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.password || ""}
-                                                        invalid={
-                                                            validation.touched.password && validation.errors.password ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.password && validation.errors.password ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.password}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-2">
-                                                    <Label htmlFor="confirmPassword" className="form-label">Confirm Password <span className="text-danger">*</span></Label>
-                                                    <Input
-                                                        name="confirm_password"
-                                                        type="password"
-                                                        placeholder="Confirm Password"
-                                                        onChange={validation.handleChange}
-                                                        onBlur={validation.handleBlur}
-                                                        value={validation.values.confirm_password || ""}
-                                                        invalid={
-                                                            validation.touched.confirm_password && validation.errors.confirm_password ? true : false
-                                                        }
-                                                    />
-                                                    {validation.touched.confirm_password && validation.errors.confirm_password ? (
-                                                        <FormFeedback type="invalid"><div>{validation.errors.confirm_password}</div></FormFeedback>
-                                                    ) : null}
-
-                                                </div>
-
-                                                <div className="mb-4">
-                                                    <p className="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Evolvtech
-                                                        <Link to="#" className="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</Link></p>
-                                                </div>
-
-                                                <div className="mt-4">
-                                                    <Button color="success" className="w-100" type="submit" disabled={loader && true}>
-                                                        {loader && <Spinner size="sm" className='me-2'> Loading... </Spinner>}
-                                                        Sign Up
-                                                    </Button>
-                                                </div>
-
-                                                <div className="mt-4 text-center">
-                                                    <div className="signin-other-title">
-                                                        <h5 className="fs-13 mb-4 title text-muted">Create account with</h5>
-                                                    </div>
-
-                                                    <div>
-                                                        <button type="button" className="btn btn-primary btn-icon waves-effect waves-light"><i className="ri-facebook-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-danger btn-icon waves-effect waves-light"><i className="ri-google-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-dark btn-icon waves-effect waves-light"><i className="ri-github-fill fs-16"></i></button>{" "}
-                                                        <button type="button" className="btn btn-info btn-icon waves-effect waves-light"><i className="ri-twitter-fill fs-16"></i></button>
-                                                    </div>
-                                                </div>
-                                            </Form>
+                                        <div className="mb-3">
+                                            <Label htmlFor="first_name">Username <span className="text-danger">*</span></Label>
+                                            <Input
+                                                id="first_name"
+                                                name="first_name"
+                                                type="text"
+                                                placeholder="Enter username"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.first_name}
+                                                invalid={!!(formik.touched.first_name && formik.errors.first_name)}
+                                            />
+                                            {formik.touched.first_name && formik.errors.first_name && (
+                                                <FormFeedback>{formik.errors.first_name}</FormFeedback>
+                                            )}
                                         </div>
-                                    </CardBody>
-                                </Card>
-                                <div className="mt-4 text-center">
-                                    <p className="mb-0">Already have an account ? <Link to="/login" className="fw-semibold text-primary text-decoration-underline"> Signin </Link> </p>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-            </ParticlesAuth>
-        </React.Fragment>
+
+                                        <div className="mb-3">
+                                            <Label htmlFor="password">Password <span className="text-danger">*</span></Label>
+                                            <Input
+                                                id="password"
+                                                name="password"
+                                                type="password"
+                                                placeholder="Enter password"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.password}
+                                                invalid={!!(formik.touched.password && formik.errors.password)}
+                                            />
+                                            {formik.touched.password && formik.errors.password && (
+                                                <FormFeedback>{formik.errors.password}</FormFeedback>
+                                            )}
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <Label htmlFor="confirm_password">Confirm Password <span className="text-danger">*</span></Label>
+                                            <Input
+                                                id="confirm_password"
+                                                name="confirm_password"
+                                                type="password"
+                                                placeholder="Confirm password"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.confirm_password}
+                                                invalid={!!(formik.touched.confirm_password && formik.errors.confirm_password)}
+                                            />
+                                            {formik.touched.confirm_password && formik.errors.confirm_password && (
+                                                <FormFeedback>{formik.errors.confirm_password}</FormFeedback>
+                                            )}
+                                        </div>
+
+                                        <div className="d-grid">
+                                            <Button color="success" type="submit" disabled={loading}>
+                                                {loading ? <Spinner size="sm" className="me-2" /> : "Sign Up"}
+                                            </Button>
+                                        </div>
+                                    </Form>
+
+                                    <div className="mt-4 text-center">
+                                        <p className="mb-0">
+                                            Already have an account?{" "}
+                                            <Link to="/login" className="fw-semibold text-primary">
+                                                Sign In
+                                            </Link>
+                                        </p>
+                                    </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        </ParticlesAuth>
     );
 };
 
