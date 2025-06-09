@@ -1,3 +1,4 @@
+// src/Routes/allRoutes.tsx
 import { Navigate } from "react-router-dom";
 
 //Dashboard

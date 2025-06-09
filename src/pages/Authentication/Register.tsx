@@ -1,49 +1,29 @@
 // src/pages/Authentication/Register.tsx
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-    Row,
-    Col,
-    Card,
-    CardBody,
-    Container,
-    Input,
-    Label,
-    Form,
-    FormFeedback,
-    Button,
-    Spinner
-} from "reactstrap";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Row, Col, Card, CardBody, Container, Input, Label, Form, FormFeedback, Button, Spinner } from 'reactstrap';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import logoLight from "../../assets/images/logo-light.png";
-import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
-import { supabase } from "../../lib/supabaseClient";
+import logoLight from '../../assets/images/logo-light.png';
+import ParticlesAuth from '../AuthenticationInner/ParticlesAuth';
+import { supabase } from '../../lib/supabaseClient';
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: {
-            email: "",
-            first_name: "",
-            password: "",
-            confirm_password: ""
-        },
+        initialValues: { email: '', first_name: '', password: '', confirm_password: '' },
         validationSchema: Yup.object({
-            email: Yup.string().email("Invalid email").required("Please enter your email"),
-            first_name: Yup.string().required("Please enter your username"),
-            password: Yup.string()
-                .min(6, "At least 6 characters")
-                .required("Please enter your password"),
+            email: Yup.string().email('Invalid email').required('Required'),
+            first_name: Yup.string().required('Required'),
+            password: Yup.string().min(6, 'Min 6 chars').required('Required'),
             confirm_password: Yup.string()
-                .oneOf([Yup.ref("password")], "Passwords do not match")
-                .required("Please confirm your password")
+                .oneOf([Yup.ref('password')], 'Passwords must match')
+                .required('Required')
         }),
         onSubmit: async (values) => {
             setLoading(true);
@@ -53,13 +33,9 @@ const Register: React.FC = () => {
                 options: { data: { first_name: values.first_name } }
             });
             setLoading(false);
-
-            if (error) {
-                toast.error(error.message);
-            } else {
-                toast.success("Registration successful! Check your email to confirm.");
-                setTimeout(() => navigate("/login"), 2000);
-            }
+            if (error) return toast.error(error.message);
+            toast.success('Registration successful!');
+            navigate('/login');
         }
     });
 
@@ -72,7 +48,7 @@ const Register: React.FC = () => {
                             <Card className="mt-4">
                                 <CardBody className="p-4">
                                     <div className="text-center mb-4">
-                                        <Link to="/" className="d-inline-block auth-logo mb-3">
+                                        <Link to="/" className="auth-logo mb-3 d-inline-block">
                                             <img src={logoLight} alt="logo" height="30" />
                                         </Link>
                                         <h5 className="text-primary">Create New Account</h5>
@@ -83,86 +59,64 @@ const Register: React.FC = () => {
                                         <ToastContainer autoClose={2000} />
 
                                         <div className="mb-3">
-                                            <Label htmlFor="email">Email <span className="text-danger">*</span></Label>
+                                            <Label htmlFor="email">Email</Label>
                                             <Input
                                                 id="email"
-                                                name="email"
                                                 type="email"
-                                                placeholder="Enter email address"
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.email}
+                                                placeholder="Enter email"
+                                                {...formik.getFieldProps('email')}
                                                 invalid={!!(formik.touched.email && formik.errors.email)}
                                             />
-                                            {formik.touched.email && formik.errors.email && (
-                                                <FormFeedback>{formik.errors.email}</FormFeedback>
-                                            )}
+                                            <FormFeedback>{formik.errors.email}</FormFeedback>
                                         </div>
 
                                         <div className="mb-3">
-                                            <Label htmlFor="first_name">Username <span className="text-danger">*</span></Label>
+                                            <Label htmlFor="first_name">Username</Label>
                                             <Input
                                                 id="first_name"
-                                                name="first_name"
                                                 type="text"
                                                 placeholder="Enter username"
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.first_name}
+                                                {...formik.getFieldProps('first_name')}
                                                 invalid={!!(formik.touched.first_name && formik.errors.first_name)}
                                             />
-                                            {formik.touched.first_name && formik.errors.first_name && (
-                                                <FormFeedback>{formik.errors.first_name}</FormFeedback>
-                                            )}
+                                            <FormFeedback>{formik.errors.first_name}</FormFeedback>
                                         </div>
 
                                         <div className="mb-3">
-                                            <Label htmlFor="password">Password <span className="text-danger">*</span></Label>
+                                            <Label htmlFor="password">Password</Label>
                                             <Input
                                                 id="password"
-                                                name="password"
                                                 type="password"
                                                 placeholder="Enter password"
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.password}
+                                                {...formik.getFieldProps('password')}
                                                 invalid={!!(formik.touched.password && formik.errors.password)}
                                             />
-                                            {formik.touched.password && formik.errors.password && (
-                                                <FormFeedback>{formik.errors.password}</FormFeedback>
-                                            )}
+                                            <FormFeedback>{formik.errors.password}</FormFeedback>
                                         </div>
 
                                         <div className="mb-4">
-                                            <Label htmlFor="confirm_password">Confirm Password <span className="text-danger">*</span></Label>
+                                            <Label htmlFor="confirm_password">Confirm Password</Label>
                                             <Input
                                                 id="confirm_password"
-                                                name="confirm_password"
                                                 type="password"
                                                 placeholder="Confirm password"
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.confirm_password}
+                                                {...formik.getFieldProps('confirm_password')}
                                                 invalid={!!(formik.touched.confirm_password && formik.errors.confirm_password)}
                                             />
-                                            {formik.touched.confirm_password && formik.errors.confirm_password && (
-                                                <FormFeedback>{formik.errors.confirm_password}</FormFeedback>
-                                            )}
+                                            <FormFeedback>{formik.errors.confirm_password}</FormFeedback>
                                         </div>
 
                                         <div className="d-grid">
                                             <Button color="success" type="submit" disabled={loading}>
-                                                {loading ? <Spinner size="sm" className="me-2" /> : "Sign Up"}
+                                                {loading ? <Spinner size="sm" className="me-2" /> : 'Sign Up'}
                                             </Button>
                                         </div>
                                     </Form>
 
-                                    <div className="mt-4 text-center">
+                                    <div className="text-center mt-3">
                                         <p className="mb-0">
-                                            Already have an account?{" "}
-                                            <Link to="/login" className="fw-semibold text-primary">
-                                                Sign In
-                                            </Link>
+                                            Already have an account?{' '}
+                                            <Link to="/login" className="fw-semibold text-primary">Sign In</Link>
                                         </p>
                                     </div>
                                 </CardBody>

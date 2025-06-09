@@ -5,6 +5,7 @@ const Dashboard: React.FC = () => {
     return (
         <div>
             {/* …your dashboard JSX… */}
+            <p>Test</p>
         </div>
     );
 };

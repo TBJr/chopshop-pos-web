@@ -1,15 +1,10 @@
 // src/App.tsx
-import React from "react";
-
-// Styles
-import "./assets/scss/themes.scss";
-
-// Central router component (already handles its own <BrowserRouter>)
-import Routes from "./Routes";
-
+import React from 'react'
+import './assets/scss/themes.scss' // Styles
+import AppRoutes from './Routes' // Central router component (already handles its own <BrowserRouter>)//
 
 function App() {
-    return <Routes />;
+    return <AppRoutes />;
 }
 
 export default App;
