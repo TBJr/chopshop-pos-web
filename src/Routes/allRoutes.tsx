@@ -1,23 +1,24 @@
 // src/Routes/allRoutes.tsx
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom'
 
 //Dashboard
-import Dashboard from "../pages/Dashboard";
+import Dashboard from '../pages/Dashboard'
 
-
-import Basic404 from '../pages/AuthenticationInner/Errors/Basic404';
-import Cover404 from '../pages/AuthenticationInner/Errors/Cover404';
-import Alt404 from '../pages/AuthenticationInner/Errors/Alt404';
-import Error500 from '../pages/AuthenticationInner/Errors/Error500';
-import Offlinepage from "../pages/AuthenticationInner/Errors/Offlinepage";
+//Error pages
+import Basic404 from '../pages/AuthenticationInner/Errors/Basic404'
+import Cover404 from '../pages/AuthenticationInner/Errors/Cover404'
+import Alt404 from '../pages/AuthenticationInner/Errors/Alt404'
+import Error500 from '../pages/AuthenticationInner/Errors/Error500'
+import Offlinepage from '../pages/AuthenticationInner/Errors/Offlinepage'
 
 //login
-import Login from "../pages/Authentication/Login";
-import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
-import Logout from "../pages/Authentication/Logout";
-import Register from "../pages/Authentication/Register";
+import Login from '../pages/Authentication/Login'
+import ForgetPasswordPage from '../pages/Authentication/ForgetPassword'
+import Logout from '../pages/Authentication/Logout'
+import Register from '../pages/Authentication/Register'
+
 // User Profile
-import UserProfile from "../pages/Authentication/user-profile";
+import UserProfile from '../pages/Authentication/user-profile'
 
 
 const authProtectedRoutes = [
@@ -44,7 +45,7 @@ const publicRoutes = [
     { path: "/forgot-password", component: <ForgetPasswordPage /> },
     { path: "/register", component: <Register /> },
 
-
+    // Error Pages
     { path: "/auth-404-basic", component: <Basic404 /> },
     { path: "/auth-404-cover", component: <Cover404 /> },
     { path: "/auth-404-alt", component: <Alt404 /> },
