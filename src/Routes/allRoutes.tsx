@@ -12,10 +12,11 @@ import Error500 from '../pages/AuthenticationInner/Errors/Error500'
 import Offlinepage from '../pages/AuthenticationInner/Errors/Offlinepage'
 
 //login
-import Login from '../pages/Authentication/Login'
-import ForgetPasswordPage from '../pages/Authentication/ForgetPassword'
-import Logout from '../pages/Authentication/Logout'
 import Register from '../pages/Authentication/Register'
+import Login from '../pages/Authentication/Login'
+import Logout from '../pages/Authentication/Logout'
+import ForgetPasswordPage from '../pages/Authentication/ForgetPassword'
+import UpdatePassword from '../pages/Authentication/UpdatePassword'
 
 // User Profile
 import UserProfile from '../pages/Authentication/user-profile'
@@ -40,10 +41,11 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
     // Authentication Page
-    { path: "/logout", component: <Logout /> },
-    { path: "/login", component: <Login /> },
-    { path: "/forgot-password", component: <ForgetPasswordPage /> },
     { path: "/register", component: <Register /> },
+    { path: "/login", component: <Login /> },
+    { path: "/logout", component: <Logout /> },
+    { path: "/forgot-password", component: <ForgetPasswordPage /> },
+    { path: "/update-password", component: <UpdatePassword /> },
 
     // Error Pages
     { path: "/auth-404-basic", component: <Basic404 /> },
