@@ -20,6 +20,7 @@ import UpdatePassword from '../pages/Authentication/UpdatePassword'
 
 // User Profile
 import UserProfile from '../pages/Authentication/user-profile'
+import ProfileSettings from "../pages/Authentication/ProfileSettings";
 
 
 const authProtectedRoutes = [
@@ -28,6 +29,7 @@ const authProtectedRoutes = [
 
     //User Profile
     { path: "/profile", component: <UserProfile /> },
+    { path: "/profile-settings", component: <ProfileSettings /> },
 
     // this route should be at the end of all other routes
     // eslint-disable-next-line react/display-name
