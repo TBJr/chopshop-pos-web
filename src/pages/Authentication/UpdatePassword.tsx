@@ -1,40 +1,29 @@
 // src/pages/Authentication/UpdatePassword.tsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import {
-    Container, Row, Col, Card, CardBody,
-    Form, Label, Input, FormFeedback,
-    Button, Spinner
-} from 'reactstrap';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ParticlesAuth from '../AuthenticationInner/ParticlesAuth';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { Container, Row, Col, Card, CardBody, Form, Label, Input, FormFeedback, Button, Spinner } from 'reactstrap'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import ParticlesAuth from '../AuthenticationInner/ParticlesAuth'
+import { supabase } from '../../lib/supabaseClient'
 
 const UpdatePassword: React.FC = () => {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
     const [loading, setLoading] = useState(false);
     const [validLink, setValidLink] = useState(false);
 
     useEffect(() => {
-        const type = searchParams.get('type');
-        const token = searchParams.get('token');
-        if (type === 'recovery' && token) {
-            supabase.auth.verifyOtp({ type: 'recovery', token })
-                .then(({ error }) => {
-                    if (error) {
-                        toast.error('Invalid or expired reset link.');
-                    } else {
-                        setValidLink(true);
-                    }
-                });
-        } else {
-            toast.error('Invalid reset link.');
-        }
-    }, [searchParams]);
+        // Check if a valid session was established via the reset link
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                setValidLink(true);
+            } else {
+                toast.error('Invalid or expired reset link.');
+            }
+        });
+    }, []);
 
     const formik = useFormik({
         initialValues: { password: '', confirm_password: '' },
@@ -42,7 +31,7 @@ const UpdatePassword: React.FC = () => {
             password: Yup.string().min(6, 'Min 6 chars').required('Required'),
             confirm_password: Yup.string()
                 .oneOf([Yup.ref('password')], 'Passwords must match')
-                .required('Required')
+                .required('Required'),
         }),
         onSubmit: async ({ password }) => {
             setLoading(true);
@@ -92,7 +81,6 @@ const UpdatePassword: React.FC = () => {
                                             <Label htmlFor="password">New Password</Label>
                                             <Input
                                                 id="password"
-                                                name="password"
                                                 type="password"
                                                 placeholder="Enter new password"
                                                 {...formik.getFieldProps('password')}
@@ -105,7 +93,6 @@ const UpdatePassword: React.FC = () => {
                                             <Label htmlFor="confirm_password">Confirm Password</Label>
                                             <Input
                                                 id="confirm_password"
-                                                name="confirm_password"
                                                 type="password"
                                                 placeholder="Confirm password"
                                                 {...formik.getFieldProps('confirm_password')}
