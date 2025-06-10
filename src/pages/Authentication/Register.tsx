@@ -1,15 +1,15 @@
 // src/pages/Authentication/Register.tsx
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Row, Col, Card, CardBody, Container, Input, Label, Form, FormFeedback, Button, Spinner } from 'reactstrap';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Row, Col, Card, CardBody, Container, Input, Label, Form, FormFeedback, Button, Spinner } from 'reactstrap'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-import logoLight from '../../assets/images/logo-light.png';
-import ParticlesAuth from '../AuthenticationInner/ParticlesAuth';
-import { supabase } from '../../lib/supabaseClient';
+import logoIcon from '../../assets/images/logo-icon.png'
+import ParticlesAuth from '../AuthenticationInner/ParticlesAuth'
+import { supabase } from '../../lib/supabaseClient'
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ const Register: React.FC = () => {
                                 <CardBody className="p-4">
                                     <div className="text-center mb-4">
                                         <Link to="/" className="auth-logo mb-3 d-inline-block">
-                                            <img src={logoLight} alt="logo" height="30" />
+                                            <img src={logoIcon} alt="logo" height="50" />
                                         </Link>
                                         <h5 className="text-primary">Create New Account</h5>
                                         <p className="text-muted">Get your free Evolvtech account now</p>

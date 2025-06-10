@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import logoLight from '../../assets/images/logo-light.png'
+import logoIcon from '../../assets/images/logo-icon.png'
 import ParticlesAuth from '../AuthenticationInner/ParticlesAuth'
 import { supabase } from '../../lib/supabaseClient'
 
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
                                 <CardBody className="p-4">
                                     <div className="text-center mb-4">
                                         <Link to="/" className="auth-logo mb-3 d-inline-block">
-                                            <img src={logoLight} alt="logo" height="30" />
+                                            <img src={logoIcon} alt="logo" height="50" />
                                         </Link>
                                         <h5 className="text-primary">Welcome Back!</h5>
                                         <p className="text-muted">Sign in to continue to Evolvtech.</p>
