@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 
 // assets
 import profileBg from '../../assets/images/profile-bg.jpg';
-import avatar1 from '../../assets/images/users/avatar-1.jpg';
+import avatar1 from '../../assets/images/users/user-dummy-img.jpg';
 
 type ProfileMeta = {
     first_name: string;
@@ -26,10 +26,10 @@ type ProfileMeta = {
     phone: string;
     city: string;
     country: string;
-    joining_date: string;
+    created_at:  string;
 };
 
-const fields = ['first_name', 'last_name', 'email', 'username', 'phone', 'city', 'country'] as const;
+const fields = ['first_name', 'last_name', 'email', 'username', 'phone', 'city', 'country', 'created_at'] as const;
 type Field = typeof fields[number];
 
 const ProfileSettings: React.FC = () => {
@@ -53,7 +53,7 @@ const ProfileSettings: React.FC = () => {
                 phone:        m.phone        || '',
                 city:         m.city         || '',
                 country:      m.country      || '',
-                joining_date: m.joining_date || ''
+                created_at:   m.created_at   || ''
             });
         })();
     }, []);
@@ -68,7 +68,7 @@ const ProfileSettings: React.FC = () => {
             phone:        meta?.phone        || '',
             city:         meta?.city         || '',
             country:      meta?.country      || '',
-            joining_date: meta?.joining_date || ''
+            created_at:   meta?.created_at   || ''
         },
         validationSchema: Yup.object({
             first_name:   Yup.string().required('Required'),
@@ -77,8 +77,6 @@ const ProfileSettings: React.FC = () => {
             username:     Yup.string().required('Required'),
             phone:        Yup.string().required('Required'),
             city:         Yup.string().required('Required'),
-            country:      Yup.string().required('Required'),
-            joining_date: Yup.string().required('Required')
         }),
         onSubmit: async (values) => {
             const { error } = await supabase.auth.updateUser({ data: values });
@@ -201,16 +199,16 @@ const ProfileSettings: React.FC = () => {
                                                             id="joining_date"
                                                             className="form-control"
                                                             options={{ dateFormat: 'Y-m-d' }}
-                                                            value={formik.values.joining_date}
+                                                            value={formik.values.created_at}
                                                             onChange={([date]) =>
                                                                 formik.setFieldValue('joining_date',
                                                                     (date as Date).toISOString().split('T')[0]
                                                                 )
                                                             }
                                                         />
-                                                        {formik.touched.joining_date && formik.errors.joining_date && (
+                                                        {formik.touched.created_at && formik.errors.created_at && (
                                                             <div className="invalid-feedback d-block">
-                                                                {formik.errors.joining_date}
+                                                                {formik.errors.created_at}
                                                             </div>
                                                         )}
                                                     </div>
